@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>University API: Tufts</title>
+    <meta charset="utf-8" />
+    <style>
+      .main {
+        color: #4495ff;
+        font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+          sans-serif;
+        font-size: 30px;
+        margin-left: 50px;
+        margin-bottom: 50px;
+        line-height: 50px;
+      }
+    </style>
+    <script>
+      function loadMessages() {
+        /* Step 1: Make instance of XHR object...
+			...to make HTTP request after page is loaded*/
+        request = new XMLHttpRequest();
+        console.log("1: created request");
+
+        // Step 2: Open the JSON file at remote location
+
+        request.open(
+          "GET",
+          "http://universities.hipolabs.com/search?name=Tufts",
+          true
+        );
+
+        console.log("2: open success");
+
+        // Step 3: set up callback for when HTTP response is returned (i.e., you get the JSON file back)
+
+        request.onreadystatechange = function () {
+          console.log("3:  event fired");
+
+          if (request.readyState == 4 && request.status == 200) {
+            // Step 5: when we get all the JSON data back, parse it and use it
+            console.log("5:  data is ready");
+            theData = request.responseText;
+            returnHTML = theData;
+            data = JSON.parse(theData);
+
+            x =
+              "<br>" +
+              "Name: " +
+              data[0]["name"] +
+              "<br>" +
+              "Country: " +
+              data[0]["country"] +
+              "<br>" +
+              "Country abbreviation: " +
+              data[0]["alpha_two_code"] +
+              "<br>" +
+              "Website: " +
+              data[0]["web_pages"][0] +
+              "<br>" +
+              "Domain: " +
+              data[0]["domains"][0] +
+              "<br>" +
+              "State-province: " +
+              data[0]["state-province"];
+
+            document.getElementById("messages").innerHTML = x;
+          } else if (request.readyState == 4 && request.status != 200) {
+            document.getElementById("messages").innerHTML =
+              "Whoops, something went terribly wrong!";
+          } else if (request.readyState == 3) {
+            console.log("6:  ready state 3- request received,data being sent");
+            document.getElementById("messages").innerHTML = "Come back soon!";
+          }
+        }; //end on readystate change
+
+        // Step 4: fire off the HTTP request
+        request.send();
+        console.log("4 request sent");
+      }
+    </script>
+  </head>
+
+  <body onload="loadMessages()">
+    <h1
+      style="
+        color: #4495ff;
+        font-size: 75px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+          sans-serif;
+        text-align: center;
+      "
+    >
+      University API: Tufts
+    </h1>
+    <div id="messages" class="main">Loading...</div>
+    <div
+      style="
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS',
+          sans-serif;
+        color: #4495ff;
+        font-size: 20px;
+        margin: 50px;
+        line-height: 30px;
+      "
+    >
+      The
+      <a href="https://github.com/Hipo/university-domains-list-api">API</a> I
+      selected provides information about universities around the world,
+      including their name, country, website, and more. For example, I filtered
+      by universites with the name Tufts and got information about Tufts
+      University. This API would be helpful in finding all universiites with a
+      certain name and to find the website corresponding the the university.
+    </div>
+  </body>
+</html>
